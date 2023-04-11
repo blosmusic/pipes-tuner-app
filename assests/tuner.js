@@ -4,11 +4,6 @@ let equalTemperamentCheckbox = document.getElementById(
   "equal-temperament-check"
 );
 
-equalTemperamentCheckbox.addEventListener("change", () => {
-  console.log(equalTemperamentCheckbox.checked);
-  changeScale();
-});
-
 let pitchBtns = document.querySelectorAll(".note-pitches-btn");
 
 let notes = [
@@ -128,6 +123,11 @@ document
     console.log("audio is ready");
   });
 
+let modeCheck = equalTemperamentCheckbox.addEventListener("change", () => {
+  console.log(equalTemperamentCheckbox.checked);
+  changeScale();
+});
+
 tunerButton.onclick = function () {
   if (!tunerIsRunning) {
     startTuner();
@@ -178,6 +178,9 @@ function getPitch() {
     if (frequency) {
       frequency = frequency.toFixed(2);
       noteValueOfFrequency(frequency);
+      // which mode is selected
+      modeCheck;
+
       comparePitchToNote(frequency);
 
       // display pitch and closest note
