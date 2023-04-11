@@ -123,7 +123,7 @@ document
     console.log("audio is ready");
   });
 
-let modeCheck = equalTemperamentCheckbox.addEventListener("change", () => {
+equalTemperamentCheckbox.addEventListener("change", () => {
   console.log(equalTemperamentCheckbox.checked);
   changeScale();
 });
@@ -179,7 +179,6 @@ function getPitch() {
       frequency = frequency.toFixed(2);
       noteValueOfFrequency(frequency);
       // which mode is selected
-      modeCheck;
 
       comparePitchToNote(frequency);
 
