@@ -1,38 +1,118 @@
 let tunerButton = document.getElementById("tuner-indication");
 let tunerIsRunning = false;
+let equalTemperamentCheckbox = document.getElementById(
+  "equal-temperament-check"
+);
+
+equalTemperamentCheckbox.addEventListener("change", () => {
+  console.log(equalTemperamentCheckbox.checked);
+  changeScale();
+});
 
 let pitchBtns = document.querySelectorAll(".note-pitches-btn");
 
 let notes = [
+  // JUST_INTONATION Notes
   {
-    mode: "GUITAR",
-    note: "E",
-    freq: 82.41,
-  },
-  {
-    mode: "GUITAR",
-    note: "A",
-    freq: 110,
-  },
-  {
-    mode: "GUITAR",
+    mode: "JUST_INTONATION",
     note: "D",
-    freq: 146.83,
+    freq: 293.33,
   },
   {
-    mode: "GUITAR",
+    mode: "JUST_INTONATION",
+    note: "E",
+    freq: 330,
+  },
+  {
+    mode: "JUST_INTONATION",
+    note: "F",
+    freq: 352,
+  },
+  {
+    mode: "JUST_INTONATION",
+    note: "F#",
+    freq: 366.66,
+  },
+  {
+    mode: "JUST_INTONATION",
     note: "G",
-    freq: 196,
+    freq: 391.11,
   },
   {
-    mode: "GUITAR",
+    mode: "JUST_INTONATION",
+    note: "A",
+    freq: 440,
+  },
+  {
+    mode: "JUST_INTONATION",
     note: "B",
-    freq: 246.94,
+    freq: 488.88,
   },
   {
-    mode: "GUITAR",
-    note: "e",
-    freq: 329.63,
+    mode: "JUST_INTONATION",
+    note: "C",
+    freq: 521.48,
+  },
+  {
+    mode: "JUST_INTONATION",
+    note: "C#",
+    freq: 549.99,
+  },
+  {
+    mode: "JUST_INTONATION",
+    note: "D",
+    freq: 586.66,
+  },
+  // Equal Temperament
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "D",
+    freq: 293.33,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "E",
+    freq: 329.26,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "F",
+    freq: 348.83,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "F#",
+    freq: 369.57,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "G",
+    freq: 391.54,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "A",
+    freq: 439.5,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "B",
+    freq: 493.32,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "C",
+    freq: 522.66,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "C#",
+    freq: 553.72,
+  },
+  {
+    mode: "EQUAL_TEMPERAMENT",
+    note: "D",
+    freq: 586.66,
   },
 ];
 
@@ -182,6 +262,9 @@ pitchBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     // console.log(btn);
     console.log(
+      "Mode:",
+      notes[btn.id.slice(-1) - 1].mode,
+      "\t",
       "Note:",
       notes[btn.id.slice(-1) - 1].note,
       "\t",
@@ -194,3 +277,13 @@ pitchBtns.forEach((btn) => {
     synth.triggerAttackRelease(notes[btn.id.slice(-1) - 1].freq, "2n");
   });
 });
+
+function changeScale() {
+  if (equalTemperamentCheckbox.checked === true) {
+    console.log("equal temperament");
+    notes.mode = "EQUAL_TEMPERAMENT";
+  } else {
+    console.log("just intonation");
+    notes.mode = "JUST_INTONATION";
+  }
+}
