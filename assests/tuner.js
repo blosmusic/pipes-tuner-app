@@ -5,8 +5,9 @@ let equalTemperamentCheckbox = document.getElementById(
 );
 
 let pitchBtns = document.querySelectorAll(".note-pitches-btn");
+let filteredNotes = [];
 
-let notes = [
+let allNoteValues = [
   // JUST_INTONATION Notes
   {
     mode: "JUST_INTONATION",
@@ -125,7 +126,7 @@ document
 
 equalTemperamentCheckbox.addEventListener("change", () => {
   console.log(equalTemperamentCheckbox.checked);
-  changeScale();
+  checkScaleValues();
 });
 
 tunerButton.onclick = function () {
@@ -178,8 +179,6 @@ function getPitch() {
     if (frequency) {
       frequency = frequency.toFixed(2);
       noteValueOfFrequency(frequency);
-      // which mode is selected
-      
       comparePitchToNote(frequency);
 
       // display pitch and closest note
@@ -204,21 +203,37 @@ function comparePitchToNote(frequency) {
   let closestNote = -1;
   let recordDifference = Infinity;
 
-  for (let i = 0; i < notes.length; i++) {
-    let diff = frequency - notes[i].freq;
+
+  
+  for (let i = 0; i < filteredNotes.length; i++) {
+    let diff = frequency - filteredNotes[i].freq;
     if (Math.abs(diff) < Math.abs(recordDifference)) {
-      closestNote = notes[i];
+      closestNote = filteredNotes[i];
       recordDifference = diff;
     }
+  // for (let i = 0; i < notes.length; i++) {
+  //   let diff = frequency - notes[i].freq;
+  //   if (Math.abs(diff) < Math.abs(recordDifference)) {
+  //     closestNote = notes[i];
+  //     recordDifference = diff;
+  //   }
 
-    checkIfNoteIsInKey(frequency, closestNote.note, closestNote.freq);
+    checkIfNoteIsInKey(
+      closestNote.mode,
+      frequency,
+      closestNote.note,
+      closestNote.freq
+    );
     tunerButton.textContent = closestNote.note;
   }
 }
 
 // todo check if note is in key and display note name in green if it is, red if it isn't
-function checkIfNoteIsInKey(inputFrequency, noteName, noteFreq) {
+function checkIfNoteIsInKey(noteMode, inputFrequency, noteName, noteFreq) {
   console.log(
+    "mode is:",
+    noteMode,
+    "\t",
     "input frequency is:",
     inputFrequency,
     "Hz",
@@ -255,9 +270,9 @@ function tunerSuccess() {
 }
 
 pitchBtns.forEach((btn) => {
-  for (let i = 0; i < notes.length; i++) {
+  for (let i = 0; i < filteredNotes.length; i++) {
     if (btn.id === `note-pitches-btn-${i + 1}`) {
-      btn.textContent = notes[i].note;
+      btn.textContent = filteredNotes[i].note;
     }
   }
 
@@ -265,29 +280,33 @@ pitchBtns.forEach((btn) => {
     // console.log(btn);
     console.log(
       "Mode:",
-      notes[btn.id.slice(-1) - 1].mode,
+      filteredNotes[btn.id.slice(-1) - 1].mode,
       "\t",
       "Note:",
-      notes[btn.id.slice(-1) - 1].note,
+      filteredNotes[btn.id.slice(-1) - 1].note,
       "\t",
       "Frequency:",
-      notes[btn.id.slice(-1) - 1].freq,
+      filteredNotes[btn.id.slice(-1) - 1].freq,
       "Hz"
     );
     // Tone.js code from https://tonejs.github.io/docs/14.7.77/Synth
     const synth = new Tone.Synth().toDestination();
-    synth.triggerAttackRelease(notes[btn.id.slice(-1) - 1].freq, "2n");
+    synth.triggerAttackRelease(filteredNotes[btn.id.slice(-1) - 1].freq, "2n");
   });
 });
 
-function changeScale() {
+function checkScaleValues() {
   if (equalTemperamentCheckbox.checked === true) {
     console.log("equal temperament");
-    let filteredNotes = notes.filter((note) => note.mode === "EQUAL_TEMPERAMENT");
+     filteredNotes = allNoteValues.filter(
+       (note) => note.mode === "EQUAL_TEMPERAMENT"
+     );
     console.log(filteredNotes);
   } else {
     console.log("just intonation");
-    let filteredNotes = notes.filter((note) => note.mode === "JUST_INTONATION");
+     filteredNotes = allNoteValues.filter(
+       (note) => note.mode === "JUST_INTONATION"
+     );
     console.log(filteredNotes);
   }
 }
