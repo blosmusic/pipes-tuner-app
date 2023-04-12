@@ -58,7 +58,7 @@ let notes = [
     note: "D",
     freq: 586.66,
   },
-  // Equal Temperament Notes
+  // EQUAL_TEMPERAMENT Notes
   {
     mode: "EQUAL_TEMPERAMENT",
     note: "D",
@@ -179,7 +179,7 @@ function getPitch() {
       frequency = frequency.toFixed(2);
       noteValueOfFrequency(frequency);
       // which mode is selected
-
+      
       comparePitchToNote(frequency);
 
       // display pitch and closest note
