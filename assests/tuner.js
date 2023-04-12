@@ -58,7 +58,7 @@ let notes = [
     note: "D",
     freq: 586.66,
   },
-  // Equal Temperament
+  // Equal Temperament Notes
   {
     mode: "EQUAL_TEMPERAMENT",
     note: "D",
@@ -283,9 +283,11 @@ pitchBtns.forEach((btn) => {
 function changeScale() {
   if (equalTemperamentCheckbox.checked === true) {
     console.log("equal temperament");
-    notes.mode = "EQUAL_TEMPERAMENT";
+    let filteredNotes = notes.filter((note) => note.mode === "EQUAL_TEMPERAMENT");
+    console.log(filteredNotes);
   } else {
     console.log("just intonation");
-    notes.mode = "JUST_INTONATION";
+    let filteredNotes = notes.filter((note) => note.mode === "JUST_INTONATION");
+    console.log(filteredNotes);
   }
 }
