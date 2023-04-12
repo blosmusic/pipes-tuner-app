@@ -5,7 +5,6 @@ let equalTemperamentCheckbox = document.getElementById(
 );
 
 let pitchBtns = document.querySelectorAll(".note-pitches-btn");
-let filteredNotes = [];
 
 let allNoteValues = [
   // JUST_INTONATION Notes
@@ -112,9 +111,18 @@ let allNoteValues = [
   },
 ];
 
+let filteredNotes = allNoteValues.filter(
+  (note) => note.mode === "JUST_INTONATION"
+);
+
 // ml5 code from https://learn.ml5js.org/#/reference/pitch-detection
 let model_url =
   "https://cdn.jsdelivr.net/gh/ml5js/ml5-data-and-models/models/pitch-detection/crepe";
+
+  equalTemperamentCheckbox.addEventListener("change", () => {
+    console.log(equalTemperamentCheckbox.checked);
+    checkScaleValues();
+  });
 
 document
   .getElementById("tuner-indication")
@@ -123,11 +131,6 @@ document
     document.querySelector("h4").innerText = "Permission Granted";
     console.log("audio is ready");
   });
-
-equalTemperamentCheckbox.addEventListener("change", () => {
-  console.log(equalTemperamentCheckbox.checked);
-  checkScaleValues();
-});
 
 tunerButton.onclick = function () {
   if (!tunerIsRunning) {
@@ -308,5 +311,5 @@ function checkScaleValues() {
        (note) => note.mode === "JUST_INTONATION"
      );
     console.log(filteredNotes);
-  }
+  } 
 }
