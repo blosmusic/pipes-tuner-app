@@ -9,13 +9,14 @@ h2 {
 }
 
 .tuner-section {
-    width: 100vu;
-    height: 100vu;
+    width: 100%;
+    height: 100%;
     padding: 10px 5px;
     background-color: #262626;
     color: #00ff9f;
     border: 3px solid #00ff9f;
     display: flex;
+    flex-wrap: wrap;
     text-align: center;
     flex-direction: column;
     justify-content: center;
@@ -65,9 +66,12 @@ h2 {
 }
 
 .note-pitches-container {
+    width: 90%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
+    text-align: center;
 }
 
 .note-pitches {
@@ -76,6 +80,8 @@ h2 {
     margin: 5px;
     padding: 10px;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .note-pitches-btn {
