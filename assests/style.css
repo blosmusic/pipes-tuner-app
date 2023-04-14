@@ -4,17 +4,22 @@ body {
     color: #262626;
 }
 
-h2 {
+h1, h2 {
     text-transform: uppercase;
+    text-align: center;
+}
+
+p {
+    font-size: medium;
 }
 
 .tuner-section {
     width: 100%;
     height: 100%;
     padding: 10px 5px;
-    background-color: #262626;
-    color: #00ff9f;
-    border: 3px solid #00ff9f;
+    background-color: #f2f2f2;
+    color: #262626;
+    /* border: 3px solid #00ff9f; */
     display: flex;
     flex-wrap: wrap;
     text-align: center;
@@ -28,7 +33,7 @@ h2 {
     width: 800px;
     height: 160px;
     background-color: #333;
-    border: 2px solid #00ff9f;
+    border: 3px solid #00ff9f;
     border-radius: 10%;
     display: flex;
     justify-content: center;
@@ -54,6 +59,11 @@ h2 {
     background-color: red;
     color: #00ff9f;
     transition: .2s;
+}
+
+#value, #result {
+    font-size: 50px;
+    font-weight: bolder;
 }
 
 .note-flat,
@@ -88,14 +98,103 @@ h2 {
     width: 80px;
     padding: 20px;
     margin: 10px;
+    color: #00ff9f;
     background-color: #333;
     border: 1px solid #00ff9f;
     border-radius: 50%;
 }
 
-.bpm-display {
-    font-size: 50px;
-    font-weight: bold;
+.note-pitches-btn:hover {
+    background-color: #00ff9f;
+    color: #333;
+    transition: .2s;
+}
+
+.equal-temperament {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.equal-temperament-check {
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.equal-temperament-check {
+    color: #262626;
+    font-weight: bolder;
+    text-transform: uppercase;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.equal-temperament-check:hover {
+    color: #262626;
+    transition: .2s;
+}
+
+.equal-temperament-check input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #262626;
+}
+
+.equal-temperament-check:hover input ~ .checkmark {
+    background-color: #00ff9f;
+    transition: .2s;
+}
+
+.equal-temperament-check input:checked ~ .checkmark {
+    background-color: #00ff9f;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.equal-temperament-check input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.equal-temperament-check .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid #262626;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .onoff-button {

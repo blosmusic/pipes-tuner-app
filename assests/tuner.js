@@ -55,7 +55,7 @@ let allNoteValues = [
   },
   {
     mode: "JUST_INTONATION",
-    note: "D",
+    note: "d",
     freq: 586.66,
   },
   // EQUAL_TEMPERAMENT Notes
@@ -106,7 +106,7 @@ let allNoteValues = [
   },
   {
     mode: "EQUAL_TEMPERAMENT",
-    note: "D",
+    note: "d",
     freq: 586.66,
   },
 ];
@@ -281,6 +281,7 @@ pitchBtns.forEach((btn) => {
 
   btn.addEventListener("click", () => {
     // console.log(btn);
+    // console.log(btn.id.slice(-1) - 1);
     console.log(
       "Mode:",
       filteredNotes[btn.id.slice(-1) - 1].mode,
