@@ -314,3 +314,8 @@ function checkScaleValues() {
     console.log(filteredNotes);
   } 
 }
+
+//monophonic
+//longer values - on/off
+//graded UI
+//battery usage
