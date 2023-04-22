@@ -278,7 +278,7 @@ pitchBtns.forEach((btn) => {
   // Tone.js code from https://tonejs.github.io/docs/14.7.77/Synth
   const synth = new Tone.MonoSynth({
     oscillator: {
-      type: "sine",
+      type: "sine2",
     },
     envelope: {
       attack: 0.01,
@@ -290,7 +290,7 @@ pitchBtns.forEach((btn) => {
   const now = Tone.now();
 
   btn.addEventListener("click", () => {
-    if (toneIsPlaying === false) {
+    // if (toneIsPlaying === false) {
       console.log(
         "Playing tone...",
         "\t",
@@ -304,21 +304,29 @@ pitchBtns.forEach((btn) => {
         filteredNotes[btn.id.slice(-1) - 1].freq,
         "Hz"
       );
-      toneIsPlaying = true;
+      // toneIsPlaying = true;
       btn.style.backgroundColor = "#00ff9f";
       btn.style.color = "#333";
       synth.triggerAttack(filteredNotes[btn.id.slice(-1) - 1].freq, now);
-    } else if (toneIsPlaying === true) {
-      console.log("tone is not playing");
-      toneIsPlaying = false;
-      btn.style.backgroundColor = "";
-      btn.style.color = "";
-      synth.triggerRelease(now);
-      //switch statement to release all notes
-      for (let i = 0; i < filteredNotes.length; i++) {
-        synth.triggerRelease(filteredNotes[btn.id.slice(-1) - 1].freq, now);
-        }
+    // } else if (toneIsPlaying === true) {
+    //   console.log("tone is not playing");
+    //   toneIsPlaying = false;
+    //   btn.style.backgroundColor = "";
+    //   btn.style.color = "";
+    //   synth.triggerRelease(now);
+    //   // //switch statement to release all notes
+    //   // for (let i = 0; i < filteredNotes.length; i++) {
+    //   //   synth.triggerRelease(filteredNotes[btn.id.slice(-1) - 1].freq, now);
+    //   //   }
+    //   }
+
+      pitchBtns.forEach((otherBtn) => {
+          if (otherBtn.id !== btn.id) {
+            synth.triggerRelease(filteredNotes[otherBtn.id.slice(-1) - 1].freq, now);
+          }
       }
+    );
+
     });
   });
 
