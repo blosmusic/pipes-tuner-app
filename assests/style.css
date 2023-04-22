@@ -54,6 +54,8 @@ p {
     text-decoration: none;
     display: inline-block;
     transition: .2s;
+    margin: 0;
+    padding: 0;
     
 }
 

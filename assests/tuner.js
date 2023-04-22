@@ -1,5 +1,6 @@
 let tunerButton = document.getElementById("tuner-indication");
 let tunerIsRunning = false;
+let toneIsPlaying = false;
 let equalTemperamentCheckbox = document.getElementById(
   "equal-temperament-check"
 );
@@ -119,17 +120,16 @@ let filteredNotes = allNoteValues.filter(
 let model_url =
   "https://cdn.jsdelivr.net/gh/ml5js/ml5-data-and-models/models/pitch-detection/crepe";
 
-  equalTemperamentCheckbox.addEventListener("change", () => {
-    console.log(equalTemperamentCheckbox.checked);
-    checkScaleValues();
-  });
+equalTemperamentCheckbox.addEventListener("change", () => {
+  console.log(equalTemperamentCheckbox.checked);
+  checkScaleValues();
+});
 
 document
-  .getElementById("tuner-indication")
+  .body
   .addEventListener("click", async () => {
     await Tone.start();
     document.querySelector("h4").innerText = "Permission Granted";
-    console.log("audio is ready");
   });
 
 tunerButton.onclick = function () {
@@ -143,9 +143,9 @@ tunerButton.onclick = function () {
 function startTuner() {
   console.log("tuner started");
   tunerButton.innerText = "O";
-  tunerIsRunning = true;
-  tunerButton.style.backgroundColor = "grey";
+  tunerButton.style.backgroundColor = "#333";
   tunerButton.style.color = "#333";
+  tunerIsRunning = true;
 
   setup();
 }
@@ -156,8 +156,8 @@ function stopTuner() {
   tunerIsRunning = false;
   audioContext.close();
   tunerButton.style.backgroundColor = "darkred";
-  document.querySelector("#note-flat").style.color = "grey";
-  document.querySelector("#note-sharp").style.color = "grey";
+  document.querySelector("#note-flat").style.color = "";
+  document.querySelector("#note-sharp").style.color = "";
 }
 
 async function setup() {
@@ -206,20 +206,18 @@ function comparePitchToNote(frequency) {
   let closestNote = -1;
   let recordDifference = Infinity;
 
-
-  
   for (let i = 0; i < filteredNotes.length; i++) {
     let diff = frequency - filteredNotes[i].freq;
     if (Math.abs(diff) < Math.abs(recordDifference)) {
       closestNote = filteredNotes[i];
       recordDifference = diff;
     }
-  // for (let i = 0; i < notes.length; i++) {
-  //   let diff = frequency - notes[i].freq;
-  //   if (Math.abs(diff) < Math.abs(recordDifference)) {
-  //     closestNote = notes[i];
-  //     recordDifference = diff;
-  //   }
+    // for (let i = 0; i < notes.length; i++) {
+    //   let diff = frequency - notes[i].freq;
+    //   if (Math.abs(diff) < Math.abs(recordDifference)) {
+    //     closestNote = notes[i];
+    //     recordDifference = diff;
+    //   }
 
     checkIfNoteIsInKey(
       closestNote.mode,
@@ -254,12 +252,12 @@ function checkIfNoteIsInKey(noteMode, inputFrequency, noteName, noteFreq) {
     case inputFrequency < noteFreq - 1:
       tunerButton.style.backgroundColor = "gold";
       document.querySelector("#note-flat").style.color = "gold";
-      document.querySelector("#note-sharp").style.color = "grey";
+      document.querySelector("#note-sharp").style.color = "#333";
       break;
     case inputFrequency > noteFreq + 1:
       tunerButton.style.backgroundColor = "gold";
       document.querySelector("#note-sharp").style.color = "gold";
-      document.querySelector("#note-flat").style.color = "grey";
+      document.querySelector("#note-flat").style.color = "#333";
       break;
     default:
       tunerSuccess();
@@ -279,40 +277,66 @@ pitchBtns.forEach((btn) => {
     }
   }
 
+  // Tone.js code from https://tonejs.github.io/docs/14.7.77/Synth
+  const synth = new Tone.MonoSynth({
+    oscillator: {
+      type: "sine",
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0.1,
+      sustain: 0.1,
+      release: 0.1,
+    },
+  }).toDestination();
+  const now = Tone.now();
+
   btn.addEventListener("click", () => {
     // console.log(btn);
     // console.log(btn.id.slice(-1) - 1);
-    console.log(
-      "Mode:",
-      filteredNotes[btn.id.slice(-1) - 1].mode,
-      "\t",
-      "Note:",
-      filteredNotes[btn.id.slice(-1) - 1].note,
-      "\t",
-      "Frequency:",
-      filteredNotes[btn.id.slice(-1) - 1].freq,
-      "Hz"
-    );
-    // Tone.js code from https://tonejs.github.io/docs/14.7.77/Synth
-    const synth = new Tone.Synth().toDestination();
-    synth.triggerAttackRelease(filteredNotes[btn.id.slice(-1) - 1].freq, "2n");
+
+    if (!toneIsPlaying) {
+      console.log(
+        "Playing tone...",
+        "\t",
+        "Mode:",
+        filteredNotes[btn.id.slice(-1) - 1].mode,
+        "\t",
+        "Note:",
+        filteredNotes[btn.id.slice(-1) - 1].note,
+        "\t",
+        "Frequency:",
+        filteredNotes[btn.id.slice(-1) - 1].freq,
+        "Hz"
+      );
+      toneIsPlaying = true;
+      synth.triggerAttack(filteredNotes[btn.id.slice(-1) - 1].freq, now);
+      btn.style.backgroundColor = "#00ff9f";
+      btn.style.color = "#333";
+    } else if (toneIsPlaying) {
+      console.log("tone is not playing");
+      toneIsPlaying = false;
+      synth.triggerRelease(now);
+      btn.style.backgroundColor = "";
+      btn.style.color = "";
+    }
   });
 });
 
 function checkScaleValues() {
   if (equalTemperamentCheckbox.checked === true) {
     console.log("equal temperament");
-     filteredNotes = allNoteValues.filter(
-       (note) => note.mode === "EQUAL_TEMPERAMENT"
-     );
+    filteredNotes = allNoteValues.filter(
+      (note) => note.mode === "EQUAL_TEMPERAMENT"
+    );
     console.log(filteredNotes);
   } else {
     console.log("just intonation");
-     filteredNotes = allNoteValues.filter(
-       (note) => note.mode === "JUST_INTONATION"
-     );
+    filteredNotes = allNoteValues.filter(
+      (note) => note.mode === "JUST_INTONATION"
+    );
     console.log(filteredNotes);
-  } 
+  }
 }
 
 //monophonic
