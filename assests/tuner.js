@@ -290,7 +290,7 @@ pitchBtns.forEach((btn) => {
   const now = Tone.now();
 
   btn.addEventListener("click", () => {
-    if (!toneIsPlaying) {
+    if (toneIsPlaying === false) {
       console.log(
         "Playing tone...",
         "\t",
@@ -305,18 +305,22 @@ pitchBtns.forEach((btn) => {
         "Hz"
       );
       toneIsPlaying = true;
-      synth.triggerAttack(filteredNotes[btn.id.slice(-1) - 1].freq, now);
       btn.style.backgroundColor = "#00ff9f";
       btn.style.color = "#333";
-    } else if (toneIsPlaying) {
+      synth.triggerAttack(filteredNotes[btn.id.slice(-1) - 1].freq, now);
+    } else if (toneIsPlaying === true) {
       console.log("tone is not playing");
       toneIsPlaying = false;
-      synth.triggerRelease();
       btn.style.backgroundColor = "";
       btn.style.color = "";
-    }
+      synth.triggerRelease(now);
+      //switch statement to release all notes
+      for (let i = 0; i < filteredNotes.length; i++) {
+        synth.triggerRelease(filteredNotes[btn.id.slice(-1) - 1].freq, now);
+        }
+      }
+    });
   });
-});
 
 function checkScaleValues() {
   if (equalTemperamentCheckbox.checked === true) {
