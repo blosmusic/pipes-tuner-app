@@ -125,12 +125,10 @@ equalTemperamentCheckbox.addEventListener("change", () => {
   checkScaleValues();
 });
 
-document
-  .body
-  .addEventListener("click", async () => {
-    await Tone.start();
-    document.querySelector("h4").innerText = "Permission Granted";
-  });
+document.body.addEventListener("click", async () => {
+  await Tone.start();
+  document.querySelector("h4").innerText = "Permission Granted";
+});
 
 tunerButton.onclick = function () {
   if (!tunerIsRunning) {
@@ -143,7 +141,7 @@ tunerButton.onclick = function () {
 function startTuner() {
   console.log("tuner started");
   tunerButton.innerText = "O";
-  tunerButton.style.backgroundColor = "#333";
+  tunerButton.style.backgroundColor = "#00ff9f";
   tunerButton.style.color = "#333";
   tunerIsRunning = true;
 
@@ -292,9 +290,6 @@ pitchBtns.forEach((btn) => {
   const now = Tone.now();
 
   btn.addEventListener("click", () => {
-    // console.log(btn);
-    // console.log(btn.id.slice(-1) - 1);
-
     if (!toneIsPlaying) {
       console.log(
         "Playing tone...",
@@ -316,7 +311,7 @@ pitchBtns.forEach((btn) => {
     } else if (toneIsPlaying) {
       console.log("tone is not playing");
       toneIsPlaying = false;
-      synth.triggerRelease(now);
+      synth.triggerRelease();
       btn.style.backgroundColor = "";
       btn.style.color = "";
     }
@@ -329,17 +324,18 @@ function checkScaleValues() {
     filteredNotes = allNoteValues.filter(
       (note) => note.mode === "EQUAL_TEMPERAMENT"
     );
+    document.getElementById("tuning-mode").textContent = "Equal Temperament";
     console.log(filteredNotes);
   } else {
     console.log("just intonation");
     filteredNotes = allNoteValues.filter(
       (note) => note.mode === "JUST_INTONATION"
     );
+    document.getElementById("tuning-mode").textContent = "Just Intonation";
     console.log(filteredNotes);
   }
 }
 
 //monophonic
-//longer values - on/off
 //graded UI
 //battery usage
