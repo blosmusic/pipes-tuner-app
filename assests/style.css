@@ -32,8 +32,6 @@ p {
 .tuner-btn {
     width: 800px;
     height: 160px;
-    background-color: #333;
-    border: 3px solid #00ff9f;
     border-radius: 10%;
     display: flex;
     justify-content: center;
@@ -45,14 +43,18 @@ p {
     height: 120px;
     border-radius: 50%;
     background-color: darkred;
-    color: grey;
+    color: #333;
     font-size: 50px;
     font-weight: bolder;
-    border: 2px solid #00ff9f;
+    border: 3px solid #00ff9f;
     cursor: pointer;
     align-items: center;
     justify-content: center;
     text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: .2s;
+    
 }
 
 .tuner-indication:hover {
@@ -68,7 +70,7 @@ p {
 
 .note-flat,
 .note-sharp {
-    color: grey;
+    color: #333;
     font-size: 50px;
     font-weight: bold;
     margin: 15px;
@@ -100,7 +102,7 @@ p {
     margin: 10px;
     color: #00ff9f;
     background-color: #333;
-    border: 1px solid #00ff9f;
+    border: 3px solid #00ff9f;
     border-radius: 50%;
 }
 
