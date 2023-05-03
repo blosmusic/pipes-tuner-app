@@ -120,6 +120,20 @@ let filteredNotes = allNoteValues.filter(
 let model_url =
   "https://cdn.jsdelivr.net/gh/ml5js/ml5-data-and-models/models/pitch-detection/crepe";
 
+// Tone.js code from https://tonejs.github.io/docs/14.7.77/Synth
+const synth = new Tone.MonoSynth({
+  oscillator: {
+    type: "sine2",
+  },
+  envelope: {
+    attack: 0.01,
+    decay: 0.1,
+    sustain: 0.1,
+    release: 0.01,
+  },
+}).toDestination();
+const now = Tone.now();
+
 equalTemperamentCheckbox.addEventListener("change", () => {
   console.log(equalTemperamentCheckbox.checked);
   checkScaleValues();
@@ -210,12 +224,6 @@ function comparePitchToNote(frequency) {
       closestNote = filteredNotes[i];
       recordDifference = diff;
     }
-    // for (let i = 0; i < notes.length; i++) {
-    //   let diff = frequency - notes[i].freq;
-    //   if (Math.abs(diff) < Math.abs(recordDifference)) {
-    //     closestNote = notes[i];
-    //     recordDifference = diff;
-    //   }
 
     checkIfNoteIsInKey(
       closestNote.mode,
@@ -227,7 +235,7 @@ function comparePitchToNote(frequency) {
   }
 }
 
-// todo check if note is in key and display note name in green if it is, red if it isn't
+// check if note is in key and display note name in green if it is, red if it isn't
 function checkIfNoteIsInKey(noteMode, inputFrequency, noteName, noteFreq) {
   console.log(
     "mode is:",
@@ -275,22 +283,8 @@ pitchBtns.forEach((btn) => {
     }
   }
 
-  // Tone.js code from https://tonejs.github.io/docs/14.7.77/Synth
-  const synth = new Tone.MonoSynth({
-    oscillator: {
-      type: "sine2",
-    },
-    envelope: {
-      attack: 0.01,
-      decay: 0.1,
-      sustain: 0.1,
-      release: 0.1,
-    },
-  }).toDestination();
-  const now = Tone.now();
-
   btn.addEventListener("click", () => {
-    // if (toneIsPlaying === false) {
+    if (toneIsPlaying === false) {
       console.log(
         "Playing tone...",
         "\t",
@@ -304,31 +298,41 @@ pitchBtns.forEach((btn) => {
         filteredNotes[btn.id.slice(-1) - 1].freq,
         "Hz"
       );
-      // toneIsPlaying = true;
+      toneIsPlaying = true;
       btn.style.backgroundColor = "#00ff9f";
       btn.style.color = "#333";
+
       synth.triggerAttack(filteredNotes[btn.id.slice(-1) - 1].freq, now);
-    // } else if (toneIsPlaying === true) {
-    //   console.log("tone is not playing");
-    //   toneIsPlaying = false;
-    //   btn.style.backgroundColor = "";
-    //   btn.style.color = "";
-    //   synth.triggerRelease(now);
-    //   // //switch statement to release all notes
-    //   // for (let i = 0; i < filteredNotes.length; i++) {
-    //   //   synth.triggerRelease(filteredNotes[btn.id.slice(-1) - 1].freq, now);
-    //   //   }
-    //   }
+    } else if (toneIsPlaying === true) {
+      console.log("tone is not playing");
+      toneIsPlaying = false;
+      btn.style.backgroundColor = "";
+      btn.style.color = "";
 
-      pitchBtns.forEach((otherBtn) => {
-          if (otherBtn.id !== btn.id) {
-            synth.triggerRelease(filteredNotes[otherBtn.id.slice(-1) - 1].freq, now);
-          }
-      }
-    );
+      synth.triggerRelease(now + 0.5);
+    }
 
-    });
+    // pitchBtns.forEach((otherBtn) => {
+    //     if (otherBtn.id !== btn.id) {
+    //       console.log("other button is not the same as this button");
+    //       toneIsPlaying = false;
+    //       otherBtn.style.backgroundColor = "";
+    //       otherBtn.style.color = "";
+
+    //       synth.triggerRelease(now + 0.5);
+    //       // synth.triggerRelease(filteredNotes[otherBtn.id.slice(-1) - 1].freq, now + 0.5);
+    //       synth.triggerAttack(
+    //         filteredNotes[otherBtn.id.slice(-1) - 1].freq,
+    //         now
+    //       );
+    //       btn.id = otherBtn.id;
+    //       toneIsPlaying = true;
+    //     }
+    // }
+    // );
+
   });
+});
 
 function checkScaleValues() {
   if (equalTemperamentCheckbox.checked === true) {
