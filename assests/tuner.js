@@ -213,7 +213,7 @@ function noteValueOfFrequency(frequencyValue) {
   return frequencyValue;
 }
 
-// todo compare pitch to closest note in scale and display note
+// compare pitch to closest note in scale and display note
 function comparePitchToNote(frequency) {
   let closestNote = -1;
   let recordDifference = Infinity;
