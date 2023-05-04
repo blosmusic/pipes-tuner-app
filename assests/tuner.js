@@ -235,7 +235,7 @@ function comparePitchToNote(frequency) {
   }
 }
 
-// check if note is in key and display note name in green if it is, red if it isn't
+// check if note is in key and display note name in green if it is, gold if it isn't
 function checkIfNoteIsInKey(noteMode, inputFrequency, noteName, noteFreq) {
   console.log(
     "mode is:",
