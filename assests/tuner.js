@@ -1,6 +1,6 @@
 let tunerButton = document.getElementById("tuner-indication");
 let tunerIsRunning = false;
-let toneIsPlaying = false;
+let tonePlaying = null;
 let equalTemperamentCheckbox = document.getElementById(
   "equal-temperament-check"
 );
@@ -284,7 +284,6 @@ pitchBtns.forEach((btn) => {
   }
 
   btn.addEventListener("click", () => {
-    if (toneIsPlaying === false) {
       console.log(
         "Playing tone...",
         "\t",
@@ -298,42 +297,28 @@ pitchBtns.forEach((btn) => {
         filteredNotes[btn.id.slice(-1) - 1].freq,
         "Hz"
       );
-      toneIsPlaying = true;
-      btn.style.backgroundColor = "#00ff9f";
-      btn.style.color = "#333";
+      
+      if (btn.id === tonePlaying) {
+        synth.triggerRelease(now + 0.5);
+        tonePlaying = null;
+      } else {
+        synth.triggerAttack(filteredNotes[btn.id.slice(-1) - 1].freq, now);
+        tonePlaying = btn.id;
+      }
 
-      synth.triggerAttack(filteredNotes[btn.id.slice(-1) - 1].freq, now);
-    } else if (toneIsPlaying === true) {
-      console.log("tone is not playing");
-      toneIsPlaying = false;
-      btn.style.backgroundColor = "";
-      btn.style.color = "";
-
-      synth.triggerRelease(now + 0.5);
-    }
-
-    // pitchBtns.forEach((otherBtn) => {
-    //     if (otherBtn.id !== btn.id) {
-    //       console.log("other button is not the same as this button");
-    //       toneIsPlaying = false;
-    //       otherBtn.style.backgroundColor = "";
-    //       otherBtn.style.color = "";
-
-    //       synth.triggerRelease(now + 0.5);
-    //       // synth.triggerRelease(filteredNotes[otherBtn.id.slice(-1) - 1].freq, now + 0.5);
-    //       synth.triggerAttack(
-    //         filteredNotes[otherBtn.id.slice(-1) - 1].freq,
-    //         now
-    //       );
-    //       btn.id = otherBtn.id;
-    //       toneIsPlaying = true;
-    //     }
-    // }
-    // );
-
+      pitchBtns.forEach((otherBtn) => {
+        if (otherBtn.id !== btn.id || tonePlaying === null) {
+          otherBtn.style.backgroundColor = "";
+          otherBtn.style.color = "";
+        } else if (otherBtn.id === btn.id) {
+          otherBtn.style.backgroundColor = "#00ff9f";
+          otherBtn.style.color = "#333";
+        }
+      });
+    });
   });
-});
 
+      
 function checkScaleValues() {
   if (equalTemperamentCheckbox.checked === true) {
     console.log("equal temperament");
@@ -352,6 +337,5 @@ function checkScaleValues() {
   }
 }
 
-//monophonic
 //graded UI
 //battery usage
